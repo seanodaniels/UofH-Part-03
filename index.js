@@ -64,6 +64,7 @@ const generateId = () => {
   return Math.floor(Math.random() * 99999)
 }
 
+// Create new entry
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -73,15 +74,27 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: generateId(),
+  const personExistsFlag = persons.some(person => person.name === body.name)
+  
+  if (!personExistsFlag) {
+    console.log("dupe exists", personExistsFlag)
+
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateId(),
+    }
+  
+    persons = persons.concat(person)
+  
+    response.json(person) 
+  } else {
+    console.log("PersonExistFlag:", personExistsFlag)
+    return response.status(400).json({
+      error: `${body.name} already exists`
+    })
   }
 
-  persons = persons.concat(person)
-
-  response.json(person) 
 })
 // TESt
 const PORT = 3001
