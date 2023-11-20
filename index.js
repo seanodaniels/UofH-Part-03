@@ -1,3 +1,8 @@
+// PHONEBOOK SERVER
+
+// Express server. Frontend located at
+// https://github.com/seanodaniels/University-of-Helsinki-Fullstack-Open/tree/main/part02/the-phonebook
+
 const express = require('express')
 const cors = require('cors')
 
@@ -114,7 +119,7 @@ let persons = [
     }
   })
 
-const PORT = 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  const PORT = process.env.PORT || 3001
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })

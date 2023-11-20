@@ -1,0 +1,1 @@
+.notification{background:lightgray;font-size:20px;border-style:solid;border-radius:5px;padding:10px;margin-bottom:10px}.notification-off{display:none}.notification-good{display:block;color:green;border-color:green}.notification-error{display:block;color:red;border-color:red}
