@@ -1,11 +1,11 @@
 // PHONEBOOK SERVER
 
-// Express server. Frontend located at
+// Express server. Frontend located at the following URL:
 // https://github.com/seanodaniels/University-of-Helsinki-Fullstack-Open/tree/main/part02/the-phonebook
 
 const express = require('express')
 const cors = require('cors')
-
+ 
 const app = express()
 
 app.use(cors())
