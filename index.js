@@ -1,9 +1,13 @@
 const express = require('express')
+const cors = require('cors')
+
 const app = express()
 
-const morgan = require('morgan')
-
+app.use(cors())
+app.use(express.static('dist'))
 app.use(express.json())
+
+const morgan = require('morgan')
 
 morgan.token('body', req => {
   return JSON.stringify(req.body)
@@ -44,7 +48,7 @@ let persons = [
 // Routes
 //
   app.get('/', (request, response) => {
-    response.send('<h1>Hello there</h1>')
+    response.send('<h1>Express Server Status</h1><p>Online. <a href="/api/persons">/api/persons</a> for contents.')
   })
 
   app.get('/api/persons', (request, response) => {
