@@ -60,17 +60,20 @@ app.use(morgan('tiny', {
     response.status(204).end()
   })
 
-  // Create new entry
+  // Save new entry to MongoDB
   app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (body.content === undefined || !body.number) {
-      return response.status(400).json({
-        error: 'content missing'
-      })
-    }
+    console.log("BODY:", body)
 
-    const personExistsFlag = persons.some(person => person.name === body.name)
+    // if (body.content === undefined || body.number === undefined) {
+    //   return response.status(400).json({
+    //     error: 'content missing'
+    //   })
+    // }
+
+    // const personExistsFlag = persons.some(person => person.name === body.name)
+    personExistsFlag = false
 
     if (!personExistsFlag) {
       const person = new Person({
