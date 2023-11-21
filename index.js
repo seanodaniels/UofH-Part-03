@@ -79,9 +79,10 @@ app.use(morgan('tiny', {
   // Info
   app.get('/info', (request, response) => {
     const getTime = new Date().toString()
-    const personsCount = Object.keys(persons).length
-    console.log("length:", personsCount)
-    response.send(`<p>Phonebook has info for ${personsCount} people</p><p>${getTime}</p>`)
+    Person.countDocuments({}).then(count => {
+      response.send(`<p>Phonebook has info for ${count} people</p><p>${getTime}</p>`)
+    })
+
 
   })
 
