@@ -2,52 +2,28 @@
 
 // Express server. Frontend located at the following URL:
 // https://github.com/seanodaniels/University-of-Helsinki-Fullstack-Open/tree/main/part02/the-phonebook
-
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const morgan = require('morgan')
+const Person = require('./models/person')
  
 const app = express()
-
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 
-const morgan = require('morgan')
-
+// Morgan setup
 morgan.token('body', req => {
   return JSON.stringify(req.body)
 })
-
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body ', {
   skip: function (req, res) { return req.method != "POST" }
 }))
-
 app.use(morgan('tiny', {
   skip: function (req, res) { return req.method == "POST" }
 }))
-
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456"
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523"
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345"
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122"
-  }
-]
 
 //
 // Routes
@@ -57,17 +33,15 @@ let persons = [
   })
 
   app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(person => {
+      response.json(person)
+    })
   })
 
   app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    if (person) {
+    Person.findById(request.params.id).then(person => {
       response.json(person)
-    } else {
-      response.status(404).end()
-    }
+    })
   })
 
   // Info
@@ -86,15 +60,11 @@ let persons = [
     response.status(204).end()
   })
 
-  const generateId = () => {
-    return Math.floor(Math.random() * 99999)
-  }
-
   // Create new entry
   app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.name || !body.number) {
+    if (body.content === undefined || !body.number) {
       return response.status(400).json({
         error: 'content missing'
       })
@@ -103,15 +73,14 @@ let persons = [
     const personExistsFlag = persons.some(person => person.name === body.name)
 
     if (!personExistsFlag) {
-      const person = {
+      const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
-      }
-    
-      persons = persons.concat(person)
-    
-      response.json(person) 
+      })
+
+      person.save().then(savedPerson => {
+        response.json(savedPerson)
+      })
     } else {
       return response.status(400).json({
         error: `${body.name} already exists`
