@@ -1,7 +1,9 @@
 // PHONEBOOK SERVER
-
-// Express server. Frontend located at the following URL:
+//
+// Connects to a MongoDB at Render Hosting.
+// Frontend located at the following URL:
 // https://github.com/seanodaniels/University-of-Helsinki-Fullstack-Open/tree/main/part02/the-phonebook
+
 require('dotenv').config()
 const express = require('express')
 const app = express()
